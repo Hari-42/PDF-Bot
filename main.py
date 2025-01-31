@@ -22,7 +22,14 @@ def upload_pdf():
     else:
         file_label.config(text="No file selected", fg="red")
 
+def summarize_pdf():
+    pass
+
 upload_button = tk.Button(root, text="Upload PDF", command=upload_pdf, font=("Arial", 12))
 upload_button.pack(pady=10)
+
+
+summarize_button = tk.Button(root, text="Summarize PDF", command=summarize_pdf)
+summarize_button.pack(pady=5)
 
 root.mainloop()
