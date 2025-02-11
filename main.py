@@ -1,6 +1,13 @@
 import tkinter as tk
 import fitz
+
 from tkinter import filedialog, scrolledtext
+
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.lsa import LsaSummarizer
+
+
 
 root = tk.Tk()
 root.title("PDF Uploader App")
@@ -43,14 +50,25 @@ def summarize_pdf():
         file_label.config(text="No PDF uploaded!", fg="red")
         return
 
+
+
     pdf_text = ""
     with fitz.open(uploaded_file_path) as doc:
         for page in doc:
             pdf_text += page.get_text("text")
 
+    parser = PlaintextParser.from_string(pdf_text, Tokenizer("english"))
+
+    summarizer = LsaSummarizer()
+
+    summary = summarizer(parser.document, 10)
+
+    summarized_text = "\n".join(str(sentence) for sentence in summary)
+
+
     text_area.config(state=tk.NORMAL)
     text_area.delete("1.0", tk.END)
-    text_area.insert(tk.END, pdf_text)
+    text_area.insert(tk.END, summarized_text)
 
 
 
